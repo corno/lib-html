@@ -40,6 +40,21 @@ export namespace N {
                         
                         export namespace T {}
                     }
+                    
+                    export namespace lang {
+                        
+                        export namespace N {
+                            
+                            export namespace O {
+                                
+                                export namespace N {}
+                                
+                                export namespace T {}
+                            }
+                        }
+                        
+                        export namespace T {}
+                    }
                 }
                 
                 export namespace T {}
@@ -2471,13 +2486,6 @@ export namespace N {
                         export namespace T {}
                     }
                     
-                    export namespace text {
-                        
-                        export namespace N {}
-                        
-                        export namespace T {}
-                    }
-                    
                     export namespace textarea {
                         
                         export namespace N {
@@ -2597,7 +2605,30 @@ export namespace N {
             
             export namespace A {
                 
-                export namespace N {}
+                export namespace N {
+                    
+                    export namespace TU {
+                        
+                        export namespace N {
+                            
+                            export namespace element {
+                                
+                                export namespace N {}
+                                
+                                export namespace T {}
+                            }
+                            
+                            export namespace text {
+                                
+                                export namespace N {}
+                                
+                                export namespace T {}
+                            }
+                        }
+                        
+                        export namespace T {}
+                    }
+                }
                 
                 export namespace T {}
             }
@@ -2710,6 +2741,13 @@ export namespace T {
         export type head = {
             readonly 'title': string
         }
+        
+        export namespace lang {
+            
+            export type O = string
+        }
+        
+        export type lang = [ false ] | [ true, string]
     }
     
     export type Document = {
@@ -2717,6 +2755,7 @@ export namespace T {
         readonly 'head': {
             readonly 'title': string
         }
+        readonly 'lang': [ false ] | [ true, string]
     }
     
     export namespace Edit {
@@ -3841,8 +3880,6 @@ export namespace T {
         
         export type sup = T.Phrasing__content
         
-        export type text = string
-        
         export namespace textarea {
             
             export type content = string
@@ -3991,7 +4028,6 @@ export namespace T {
         | ['strong', T.Phrasing__content]
         | ['sub', T.Phrasing__content]
         | ['sup', T.Phrasing__content]
-        | ['text', string]
         | ['textarea', {
             readonly 'content': string
         }]
@@ -4008,10 +4044,22 @@ export namespace T {
     
     export namespace Phrasing__content {
         
-        export type A = T.Phrasing
+        export namespace A {
+            
+            export type element = T.Phrasing
+            
+            export type text = string
+        }
+        
+        export type A = 
+            | ['element', T.Phrasing]
+            | ['text', string]
     }
     
-    export type Phrasing__content = pt.Array<T.Phrasing>
+    export type Phrasing__content = pt.Array<
+        | ['element', T.Phrasing]
+        | ['text', string]
+    >
     
     export namespace Script__supporting {
         

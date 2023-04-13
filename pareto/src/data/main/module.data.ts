@@ -16,7 +16,7 @@ export const $: g_project.T.Module<pd.SourceLocation> = {
             'imports': d({
                 "xml": tempSubmodule("xml"),
                 "html": tempSubmodule("html"),
-                //"common": external("glo-pareto-common"),
+                "common": external("glo-pareto-common"),
             }),
         },
         'api': {
@@ -24,6 +24,10 @@ export const $: g_project.T.Module<pd.SourceLocation> = {
             'imports': d({
                 //"common": "glo-pareto-common",
                 "this": this_(),
+                "array": external("res-pareto-array"),
+                "dictionary": external("res-pareto-dictionary"),
+                "fp": external("lib-fountain-pen"),
+                "xml": submodule("xml"),
             }),
         }
     },

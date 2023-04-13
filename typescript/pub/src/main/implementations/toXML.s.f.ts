@@ -1,28 +1,32 @@
+import * as pt from 'pareto-core-types'
 import * as pl from 'pareto-core-lib'
 import * as pd from 'pareto-core-dev'
 import * as pm from 'pareto-core-map'
 
 import * as g_in from "../../submodules/html"
 import * as g_out from "../../submodules/xml"
+import * as g_dictionary from "res-pareto-dictionary"
 
 import { A } from "../api.generated"
 
 const d = pm.wrapRawDictionary
 const a = pm.wrapRawArray
 
-export const $$: A.toXML = () => {
-    function mixedContentElement(id: string, attributes: g_out.T.Element.attributes, children: g_out.T.Element._ltype.mixed.children): g_out.T.Element {
+export const $$: A.toXML = ($d) => {
+
+    type OptionalAttributes = g_dictionary.T.FilterableDictionary<string>
+    function mixedContentElement(id: string, attributes: OptionalAttributes, children: g_out.T.Element._ltype.mixed.children): g_out.T.Element {
         return {
-            'attributes': attributes,
+            'attributes': $d.filter(attributes),
             'id': id,
             'type': ['mixed', {
                 'children': children
             }]
         }
     }
-    function nonTextElement(id: string, attributes: g_out.T.Element.attributes, children: g_out.T.Element._ltype.elements.children): g_out.T.Element {
+    function nonTextElement(id: string, attributes: OptionalAttributes, children: g_out.T.Element._ltype.elements.children): g_out.T.Element {
         return {
-            'attributes': attributes,
+            'attributes': $d.filter(attributes),
             'id': id,
             'type': ['elements', {
                 'children': children
@@ -32,13 +36,15 @@ export const $$: A.toXML = () => {
 
     function map_Document($: g_in.T.Document): g_out.T.Document {
         return {
-            'root': nonTextElement("html", d({}), a([
+            'root': nonTextElement("html", d({
+                "lang": $.lang,
+            }), a([
                 nonTextElement("head", d({}), a([
                     mixedContentElement("title", d({}), a([
                         ['text', $.head.title]
                     ]))
                 ])),
-                nonTextElement("body", d({}), map_Flow__content($.body)),
+                mixedContentElement("body", d({}), map_Flow__content($.body)),
 
             ]))
         }
@@ -90,11 +96,13 @@ export const $$: A.toXML = () => {
     function map_Flow($: g_in.T.Flow): g_out.T.Element {
         return pl.cc($, ($) => {
             switch ($[0]) {
-                case 'id': return pl.ss($, ($) => map_Flow($.child))
-                case 'class': return pl.ss($, ($) => map_Flow($.child))
+                // case 'id': return pl.ss($, ($) => map_Flow($.child))
+                // case 'class': return pl.ss($, ($) => map_Flow($.child))
+                case 'id': return pd.implementMe("ID")
+                case 'class': return pd.implementMe("CLASS")
                 case 'script supporting': return pl.ss($, ($) => map_Script__supporting($))
                 case 'embedded': return pl.ss($, ($) => map_Embedded($))
-                case 'details': return pl.ss($, ($) => nonTextElement("details", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'details': return pl.ss($, ($) => mixedContentElement("details", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 // /*({
                 //     'summary': pl.cc($, ($) => $.map(($) => pl.cc($, ($) => {
                 //         switch ($[0]) {
@@ -108,15 +116,15 @@ export const $$: A.toXML = () => {
                 // })*/
                 case 'address': return pl.ss($, ($) => nonTextElement("address", pm.wrapRawDictionary({}), pm.wrapRawArray([])))
 
-                case 'blockquote': return pl.ss($, ($) => nonTextElement("blockquote", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'blockquote': return pl.ss($, ($) => mixedContentElement("blockquote", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 /*({
                     'cite': pl.cc($, ($) => $),
                 })*/
-                case 'del': return pl.ss($, ($) => nonTextElement("del", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'del': return pl.ss($, ($) => mixedContentElement("del", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 /*({
                     'edit': pl.cc($, ($) => map_Edit($)),
                 })*/
-                case 'dialog': return pl.ss($, ($) => nonTextElement("dialog", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'dialog': return pl.ss($, ($) => mixedContentElement("dialog", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 /*({
                     'open': pl.cc($, ($) => pl.optional(
                         $,
@@ -136,7 +144,7 @@ export const $$: A.toXML = () => {
                 //         default: return pl.au($[1])
                 //     }
                 // })*/
-                case 'fieldset': return pl.ss($, ($) => nonTextElement("fieldset", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'fieldset': return pl.ss($, ($) => mixedContentElement("fieldset", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 /*({
                     'legend': pl.cc($, ($) => pl.optional(
                         $,
@@ -144,7 +152,7 @@ export const $$: A.toXML = () => {
                         () => [false],
                     )),
                 })*/
-                case 'figure': return pl.ss($, ($) => nonTextElement("figure", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'figure': return pl.ss($, ($) => mixedContentElement("figure", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 // /*({
                 //     'caption': pl.cc($, ($) => pl.optional(
                 //         $,
@@ -171,12 +179,12 @@ export const $$: A.toXML = () => {
 
                 case 'hr': return pl.ss($, ($) => nonTextElement("hr", pm.wrapRawDictionary({}), pm.wrapRawArray([])))
 
-                case 'ins': return pl.ss($, ($) => nonTextElement("ins", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'ins': return pl.ss($, ($) => mixedContentElement("ins", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 /*({
                     'edit': pl.cc($, ($) => map_Edit($)),
                 })*/
-                case 'main': return pl.ss($, ($) => nonTextElement("main", pm.wrapRawDictionary({}), map_Flow__content($)))
-                case 'map': return pl.ss($, ($) => nonTextElement("map", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'main': return pl.ss($, ($) => mixedContentElement("main", pm.wrapRawDictionary({}), map_Flow__content($)))
+                case 'map': return pl.ss($, ($) => mixedContentElement("map", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 /*({
                     'name': pl.cc($, ($) => $),
                 })*/
@@ -190,7 +198,7 @@ export const $$: A.toXML = () => {
                 //         default: return pl.au($[1])
                 //     }
                 // }))*/
-                case 'object': return pl.ss($, ($) => nonTextElement("object", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'object': return pl.ss($, ($) => mixedContentElement("object", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 case 'ol': return pl.ss($, ($) => nonTextElement("ol", pm.wrapRawDictionary({}), pm.wrapRawArray([])))
                 // /*({
                 //     'reversed': pl.cc($, ($) => pl.optional(
@@ -237,8 +245,8 @@ export const $$: A.toXML = () => {
                 // })*/
                 case 'p': return pl.ss($, ($) => mixedContentElement("p", pm.wrapRawDictionary({}), map_Phrasing__content($)))
                 case 'pre': return pl.ss($, ($) => mixedContentElement("pre", pm.wrapRawDictionary({}), map_Phrasing__content($)))
-                case 'search': return pl.ss($, ($) => nonTextElement("search", pm.wrapRawDictionary({}), map_Flow__content($)))
-                case 'slot': return pl.ss($, ($) => nonTextElement("slot", pm.wrapRawDictionary({}), map_Flow__content($.content)))
+                case 'search': return pl.ss($, ($) => mixedContentElement("search", pm.wrapRawDictionary({}), map_Flow__content($)))
+                case 'slot': return pl.ss($, ($) => mixedContentElement("slot", pm.wrapRawDictionary({}), map_Flow__content($.content)))
                 /*({
                     'name': pl.cc($, ($) => $),
                 })*/
@@ -268,17 +276,14 @@ export const $$: A.toXML = () => {
             }
         })
     }
-    function map_Flow__content($: g_in.T.Flow__content): g_out.T.Element._ltype.elements.children {
-
-
-        return $.map(($) => pl.cc($, ($) => {
+    function map_Flow__content($: g_in.T.Flow__content): g_out.T.Element._ltype.mixed.children {
+        return $d.merge($.map(($) => pl.cc($, ($) => {
             switch ($[0]) {
-                case 'flow': return pl.ss($, ($) => pd.implementMe(`case`))
-                case 'phrase': return pl.ss($, ($) => pd.implementMe(`case`))
-                //case 'phrase': return pl.ss($, ($) => nonTextElement("phrase", pm.wrapRawDictionary({}),))
+                case 'flow': return pl.ss($, ($) => a([['element', map_Flow($)]]))
+                case 'phrase': return pl.ss($, ($) => map_Phrasing__content($))
                 default: return pl.au($[0])
             }
-        }))
+        })))
     }
     function map_Heading($: g_in.T.Heading): g_out.T.Element {
         return pl.cc($, ($) => {
@@ -351,10 +356,10 @@ export const $$: A.toXML = () => {
     function map_Phrasing($: g_in.T.Phrasing): g_out.T.Element {
         return pl.cc($, ($) => {
             switch ($[0]) {
-                case 'id': return pl.ss($, ($) => map_Phrasing($.child))
-                case 'class': return pl.ss($, ($) => map_Phrasing($.child))
-                case 'text': return pl.ss($, ($) => mixedContentElement("text", pm.wrapRawDictionary({}), pm.wrapRawArray([])))
-                /*$*/
+                // case 'id': return pl.ss($, ($) => map_Phrasing($.child))
+                // case 'class': return pl.ss($, ($) => map_Phrasing($.child))
+                case 'id': return pd.implementMe("ID")
+                case 'class': return pd.implementMe("CLASS")
                 case 'link': return pl.ss($, ($) => mixedContentElement("link", pm.wrapRawDictionary({}), pm.wrapRawArray([])))
 
                 case 'meta': return pl.ss($, ($) => mixedContentElement("meta", pm.wrapRawDictionary({}), pm.wrapRawArray([])))
@@ -517,7 +522,15 @@ export const $$: A.toXML = () => {
         })
     }
     function map_Phrasing__content($: g_in.T.Phrasing__content): g_out.T.Element._ltype.mixed.children {
-        return $.map(($) => ['element', map_Phrasing($)])
+        return $.map(($) => pl.cc($, ($) => {
+            switch ($[0]) {
+                case 'element': return pl.ss($, ($) => ['element', map_Phrasing($)])
+                case 'text': return pl.ss($, ($) => ['text', $])
+                default: return pl.au($[0])
+            }
+        }))
+
+
     }
     function map_Sectioning__content($: g_in.T.Sectioning__content): g_out.T.Element {
         return pl.cc($, ($) => {

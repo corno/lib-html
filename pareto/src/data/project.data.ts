@@ -5,6 +5,7 @@ import * as mproject from "lib-pareto-typescript-project/dist/submodules/project
 const d = pd.d
 
 import { $ as main } from "./main/module.data"
+import { $ as bindings } from "./bindings/moduledefintion.data"
 import { $ as html } from "./submodules/html/module.data"
 import { $ as xml } from "./submodules/xml/module.data"
 
@@ -15,6 +16,8 @@ export const $: mproject.T.Project<pd.SourceLocation> = {
 
     'dependencies': d({
         "glo-pareto-common": null,
+        "res-pareto-array": null,
+        "res-pareto-dictionary": null,
         "res-pareto-foreach": null,
         "lib-fountain-pen": null,
     }),
@@ -24,7 +27,11 @@ export const $: mproject.T.Project<pd.SourceLocation> = {
             "html": html,
             "xml": xml,
         }),
-        'bindings': [false],
+        'bindings': [true, {
+            'definition': bindings,
+            'implementation': ['typescript', null],
+
+        }],
         'executables': d({}),
         'test': {
             'dependencies': d({

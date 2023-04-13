@@ -60,6 +60,7 @@ export const $: g_liana.T.Type__Library<pd.SourceLocation> = {
         tr
         */
         "Document": globalType({}, group({
+            "lang": prop(optional(terminal("tbd"))),
             "head": prop(group({
                 "title": prop(terminal("Text that is not inter-element whitespace"))
             })),
@@ -368,8 +369,6 @@ export const $: g_liana.T.Type__Library<pd.SourceLocation> = {
                 "child": prop(component("Phrasing", {}))
             })),
 
-            "text": option(terminal("tbd")),
-
             //elements
             "link": option(group({
                 /*FIXME*/
@@ -644,7 +643,10 @@ export const $: g_liana.T.Type__Library<pd.SourceLocation> = {
             "wbr": option(group({})), //line break opportunity
             "embedded": option(component("Embedded", {})),
         })),
-        "Phrasing content": globalType({}, array(component("Phrasing", {}))),
+        "Phrasing content": globalType({}, array(taggedUnion({
+            "text": option(terminal("tbd")),
+            "element": option(component("Phrasing", {})),
+        }))),
         "Sectioning content": globalType({}, taggedUnion({
             "article": option(component("Flow content", {})),
             "aside": option(component("Flow content", {})),

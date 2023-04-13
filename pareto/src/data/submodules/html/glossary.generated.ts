@@ -27,6 +27,9 @@ export const $: g_glossary.T.Glossary<pd.SourceLocation> = {
                             },
                         })],
                     },
+                    "lang": {
+                        'type': <g_glossary.T.Type<pd.SourceLocation>>['optional', <g_glossary.T.Type<pd.SourceLocation>>['string', null]],
+                    },
                 })]
             },
             "Edit": {
@@ -804,7 +807,6 @@ export const $: g_glossary.T.Glossary<pd.SourceLocation> = {
                         'type': "Phrasing content",
                         'arguments': d({}),
                     }]],
-                    "text": <g_glossary.T.Type<pd.SourceLocation>>['string', null],
                     "textarea": <g_glossary.T.Type<pd.SourceLocation>>['group', d({
                         "content": {
                             'type': <g_glossary.T.Type<pd.SourceLocation>>['string', null],
@@ -840,11 +842,14 @@ export const $: g_glossary.T.Glossary<pd.SourceLocation> = {
             },
             "Phrasing content": {
                 'parameters': d({}),
-                'type': <g_glossary.T.Type<pd.SourceLocation>>['array', <g_glossary.T.Type<pd.SourceLocation>>['reference', ['type', {
-                    'context': <g_glossary.T.Context<pd.SourceLocation>>['local', null],
-                    'type': "Phrasing",
-                    'arguments': d({}),
-                }]]]
+                'type': <g_glossary.T.Type<pd.SourceLocation>>['array', <g_glossary.T.Type<pd.SourceLocation>>['taggedUnion', d({
+                    "element": <g_glossary.T.Type<pd.SourceLocation>>['reference', ['type', {
+                        'context': <g_glossary.T.Context<pd.SourceLocation>>['local', null],
+                        'type': "Phrasing",
+                        'arguments': d({}),
+                    }]],
+                    "text": <g_glossary.T.Type<pd.SourceLocation>>['string', null],
+                })]]
             },
             "Script supporting": {
                 'parameters': d({}),
@@ -913,6 +918,15 @@ export const $: g_glossary.T.Glossary<pd.SourceLocation> = {
                                                 'namespaces': d({}),
                                             },
                                         }),
+                                    },
+                                }),
+                            },
+                            "lang": {
+                                'types': d({}),
+                                'namespaces': d({
+                                    "O": {
+                                        'types': d({}),
+                                        'namespaces': d({}),
                                     },
                                 }),
                             },
@@ -2377,10 +2391,6 @@ export const $: g_glossary.T.Glossary<pd.SourceLocation> = {
                                 'types': d({}),
                                 'namespaces': d({}),
                             },
-                            "text": {
-                                'types': d({}),
-                                'namespaces': d({}),
-                            },
                             "textarea": {
                                 'types': d({}),
                                 'namespaces': d({
@@ -2453,7 +2463,21 @@ export const $: g_glossary.T.Glossary<pd.SourceLocation> = {
                 'namespaces': d({
                     "A": {
                         'types': d({}),
-                        'namespaces': d({}),
+                        'namespaces': d({
+                            "TU": {
+                                'types': d({}),
+                                'namespaces': d({
+                                    "element": {
+                                        'types': d({}),
+                                        'namespaces': d({}),
+                                    },
+                                    "text": {
+                                        'types': d({}),
+                                        'namespaces': d({}),
+                                    },
+                                }),
+                            },
+                        }),
                     },
                 }),
             },
